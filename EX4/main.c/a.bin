@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+int main() {
+    FILE *fp;
+    int a[] = {0, 1, 2};
+    char b[] = "ABC";         // 實際是4格含 '\0'
+    float c[] = {1.1, 1.2, 1.3};
+    int ra[3];
+    char rb[4];
+    float rc[3];
+
+    fp = fopen("a.bin", "wb+");
+    fwrite(a, sizeof(a), 1, fp);   // buffer 方式，一次整個陣列
+    fwrite(b, sizeof(b), 1, fp);   // buffer，一次整個字元陣列
+    fwrite(c, sizeof(c), 1, fp);   // buffer，一次整個 float 陣列
+
+    fseek(fp, 0, SEEK_SET);
+
+    fread(ra, sizeof(ra), 1, fp);  // buffer，一次讀 int 陣列
+    fread(rb, sizeof(rb), 1, fp);  // buffer，一次讀 char 陣列
+    fread(rc, sizeof(rc), 1, fp);  // buffer，一次讀 float 陣列
+
+    for (int i = 0; i < 3; i++)
+        printf("%d ", ra[i]);
+    printf("\n%s\n", rb);
+    for (int i = 0; i < 3; i++)
+        printf("%.6f ", rc[i]);
+    printf("\n");
+    fclose(fp);
+    return 0;
+}
